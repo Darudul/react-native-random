@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ScrollView, StyleSheet, Text, View } from 'react-native';
+import { RefreshControl, ScrollView, StyleSheet, Text, View } from 'react-native';
 
 
 const itemList = [
@@ -20,10 +20,29 @@ const itemList = [
   { key: 15, item: 'Item 15' },
 ]
 export default function App() {
-  const [items, setItems] = useState(itemList)
+  const [items, setItems] = useState(itemList);
+
+  const [refreshing, setRefreshing] = useState(false)
+
+  const onRefresh = () => {
+    setRefreshing(true)
+    setItems([...items, { key: 16, item: 'Item 16' }])
+    setRefreshing(false)
+  }
+
   return (
     <View style={styles.container}>
-      <ScrollView>
+
+      <ScrollView
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            colors={['#ff00ff']}
+          />
+        }
+      >
+
         {
           items.map(object => {
             return (
